@@ -1,0 +1,1 @@
+// aqui ficam as configurações da aplicação, como rotas e middlewares

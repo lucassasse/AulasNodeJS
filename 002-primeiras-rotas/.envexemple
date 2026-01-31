@@ -1,0 +1,8 @@
+# Exemplo de variáveis de ambiente - É uma "cópia" do .env, mas sem as informações reais
+
+PORT=3000
+
+DB_HOST=localhost
+DB_USER=usuario
+DB_PASS=senha
+DB_NAME=nome_do_banco

@@ -1,0 +1,148 @@
+-- Criar banco de dados
+CREATE DATABASE IF NOT EXISTS gest_estoque_nomeAluno;
+USE gest_estoque_nomeAluno;
+
+-- =======================
+-- TABELA: categorias
+-- =======================
+CREATE TABLE categorias (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 20 CATEGORIAS
+INSERT INTO categorias (nome) VALUES
+('Martelos'),
+('Chaves de Fenda'),
+('Alicates'),
+('Serras Manuais'),
+('Trenas'),
+('Formões'),
+('Chaves Inglesas'),
+('Chaves Allen'),
+('Limas'),
+('Tornos'),
+('Marretas'),
+('Estiletes'),
+('Chaves Soquete'),
+('Esquadro'),
+('Níveis'),
+('Alicate Crimpador'),
+('Serrotes'),
+('Lanternas de Oficina'),
+('Brocas Metálicas'),
+('Parafusadeiras Manuais');
+
+-- =======================
+-- TABELA: produtos
+-- =======================
+CREATE TABLE produtos (
+    id_produto INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(200) NOT NULL,
+    descrição TEXT,
+    id_categoria INT,
+    material VARCHAR(100),
+    tamanho VARCHAR(50),
+    peso DECIMAL(10,2),
+    estoque_atual INT DEFAULT 0,
+    estoque_minimo INT NOT NULL,
+    ativo TINYINT(1) DEFAULT 1,
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
+
+-- 20 PRODUTOS
+INSERT INTO produtos (nome, descrição, id_categoria, material, tamanho, peso, estoque_atual, estoque_minimo)
+VALUES
+('Martelo de Borracha', 'Cabeça de borracha e cabo de madeira', 1, 'Borracha/Madeira', '30 cm', 0.45, 10, 3),
+('Chave de Fenda Philips Média', 'Ponta cruzada, cabo emborrachado', 2, 'Aço Carbono', '15 cm', 0.12, 20, 5),
+('Alicate Universal 8"', 'Modelo profissional', 3, 'Aço Forjado', '8 polegadas', 0.35, 5, 2),
+('Serra Manual 12"', 'Lâmina reforçada', 4, 'Aço Temperado', '12 polegadas', 0.50, 8, 2),
+('Trena de 5m', 'Trava automática', 5, 'Plástico/Aço', '5 metros', 0.25, 12, 3),
+('Formão 1/2"', 'Cabo resistente', 6, 'Aço Cr-V', '1/2 polegada', 0.10, 7, 2),
+('Chave Inglesa 12"', 'Regulagem resistente', 7, 'Aço Forjado', '12 polegadas', 0.48, 9, 3),
+('Kit Chaves Allen 1-10mm', 'Jogo com 10 unidades', 8, 'Aço Carbono', '10 unidades', 0.20, 15, 4),
+('Lima Redonda 8"', 'Uso profissional', 9, 'Aço Carbono', '8 polegadas', 0.18, 6, 2),
+('Torno de Bancada 5"', 'Alta pressão', 10, 'Aço Fundido', '5 polegadas', 3.50, 3, 1),
+('Marreta 2kg', 'Uso pesado', 11, 'Aço/Madeira', '35 cm', 2.00, 4, 1),
+('Estilete Retrátil', 'Lâmina inox', 12, 'Plástico/Metal', '15 cm', 0.08, 13, 3),
+('Jogo de Soquetes 10-32mm', '20 peças', 13, 'Cr-V', '20 peças', 1.20, 6, 2),
+('Esquadro Metálico 25cm', 'Precisão milimétrica', 14, 'Aço Inox', '25 cm', 0.22, 9, 3),
+('Nível 40cm', 'Bolha tripla', 15, 'Alumínio', '40 cm', 0.30, 10, 3),
+('Alicate Crimpador RJ45', 'Profissional', 16, 'Aço Carbono', '20 cm', 0.35, 4, 1),
+('Serrote 20"', 'Dentado reforçado', 17, 'Aço Temperado', '20 polegadas', 0.60, 5, 2),
+('Lanterna de Oficina LED', 'Recarregável', 18, 'ABS/LED', '30 cm', 0.40, 11, 3),
+('Broca para Metal 6mm', 'Alta resistência', 19, 'Aço Rápido HSS', '6 mm', 0.05, 50, 10),
+('Parafusadeira Manual', 'Com estojo', 20, 'Aço/ABS', '25 cm', 0.55, 6, 2);
+
+-- =======================
+-- TABELA: movimentacoes
+-- =======================
+CREATE TABLE movimentacoes (
+    id_movimentacao INT AUTO_INCREMENT PRIMARY KEY,
+    id_produto INT NOT NULL,
+    tipo ENUM('entrada','saida') NOT NULL,
+    quantidade INT NOT NULL,
+    data_movimentacao DATETIME NOT NULL,
+    observacao TEXT,
+    FOREIGN KEY (id_produto) REFERENCES produtos(id_produto)
+);
+
+-- 20 MOVIMENTAÇÕES
+INSERT INTO movimentacoes (id_produto, tipo, quantidade, data_movimentacao, observacao)
+VALUES
+(1, 'entrada', 20, '2024-01-10 10:00:00', 'Recebimento inicial'),
+(2, 'saida', 5, '2024-01-11 08:30:00', 'Uso no setor de montagem'),
+(3, 'entrada', 15, '2024-01-12 14:45:00', 'Reposição de estoque'),
+(4, 'entrada', 10, '2024-01-13 13:20:00', 'Compra de reposição'),
+(5, 'saida', 3, '2024-01-14 09:00:00', 'Uso interno'),
+(6, 'entrada', 12, '2024-01-15 10:10:00', 'Reposição'),
+(7, 'saida', 2, '2024-01-16 11:30:00', 'Manutenção'),
+(8, 'entrada', 25, '2024-01-17 16:40:00', 'Compra lote'),
+(9, 'entrada', 10, '2024-01-18 14:00:00', 'Compra padrão'),
+(10, 'saida', 1, '2024-01-19 15:00:00', 'Utilização oficina'),
+(11, 'entrada', 8, '2024-01-20 09:30:00', 'Compra emergencial'),
+(12, 'entrada', 20, '2024-01-21 12:10:00', 'Reposição'),
+(13, 'saida', 3, '2024-01-22 10:15:00', 'Uso no setor'),
+(14, 'entrada', 12, '2024-01-23 08:55:00', 'Compra lote'),
+(15, 'saida', 4, '2024-01-24 13:05:00', 'Uso interno'),
+(16, 'entrada', 5, '2024-01-25 11:11:00', 'Reposição'),
+(17, 'entrada', 7, '2024-01-26 10:10:00', 'Nova compra'),
+(18, 'entrada', 30, '2024-01-27 15:22:00', 'Reforço de estoque'),
+(19, 'saida', 10, '2024-01-28 09:50:00', 'Uso de produção'),
+(20, 'entrada', 6, '2024-01-29 14:40:00', 'Compra unitária');
+
+-- =======================
+-- TABELA: histórico_estoque
+-- =======================
+CREATE TABLE histórico_estoque (
+    id_historico INT AUTO_INCREMENT PRIMARY KEY,
+    id_movimentacao INT NOT NULL,
+    estoque_anterior INT NOT NULL,
+    estoque_posterior INT NOT NULL,
+    FOREIGN KEY (id_movimentacao) REFERENCES movimentacoes(id_movimentacao)
+);
+
+-- 20 HISTÓRICOS (assumindo valores coerentes)
+INSERT INTO histórico_estoque (id_movimentacao, estoque_anterior, estoque_posterior)
+VALUES
+(1, 0, 20),
+(2, 20, 15),
+(3, 5, 20),
+(4, 0, 10),
+(5, 12, 9),
+(6, 7, 19),
+(7, 9, 7),
+(8, 15, 40),
+(9, 6, 16),
+(10, 3, 2),
+(11, 4, 12),
+(12, 13, 33),
+(13, 6, 3),
+(14, 9, 21),
+(15, 10, 6),
+(16, 4, 9),
+(17, 5, 12),
+(18, 11, 41),
+(19, 50, 40),
+(20, 6, 12);
+

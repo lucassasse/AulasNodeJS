@@ -1,0 +1,9 @@
+# o que for posto aqui, não será enviado para o repositório remoto (github, gitlab, etc)
+
+# Node modules (dependências do projeto, pasta criada ao rodar 'npm install') 
+# Pasta muito grande, não faz sentido enviar para o repositório (dependencias são listadas no package.json)
+node_modules/
+
+# Environment variables file (arquivo que guarda variáveis de ambiente, como senhas, chaves de API, etc)
+# Jamais envie esse arquivo para o repositório remoto, para evitar expor informações sensíveis
+.env
