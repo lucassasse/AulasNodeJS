@@ -57,7 +57,7 @@ Este projeto usa o **Swagger Autogen** para gerar automaticamente a documentaç�
 - **POST** `/produtos` - Cria novo produto  
 - **GET** `/produtos/{id}` - Busca produto por ID
 - **PUT** `/produtos/{id}` - Atualiza produto
-- **DELETE** `/produtos/{id}` - Desativa produto (soft delete)
+- **DELETE** `/produtos/{id}` - Desativa produto (soft delete) - edit: removido soft delete para simplificação de código
 - **GET** `/categorias` - Lista categorias
 - **GET** `/movimentacoes` - Lista movimentações
 
@@ -79,7 +79,7 @@ DELETE /categorias/:id - Exclui uma categoria
 ✅ Impede exclusão se houver produtos vinculados
 ✅ Retorna informações detalhadas sobre a operação
 📦 Produtos (/produtos)
-DELETE /produtos/:id - Desativa produto (soft delete)
+DELETE /produtos/:id - Desativa produto (soft delete) - edit: removido soft delete para simplificação de código
 
 ✅ Define ativo = 0 mantendo histórico
 ✅ Verifica se o produto já está inativo
@@ -115,7 +115,7 @@ DELETE /historico/produto/:id_produto - Remove todo histórico de um produto
 🔒 Recursos de Segurança Implementados
 Verificação de Dependências: Impede exclusões que quebrariam integridade referencial
 Transações: Garantem consistência dos dados em operações complexas
-Soft Delete: Produtos são desativados por padrão, preservando histórico
+Soft Delete: Produtos são desativados por padrão, preservando histórico - edit: removido soft delete para simplificação de código
 Validações: Verificam existência antes de tentar excluir
 Mensagens Detalhadas: Retornam informações claras sobre o resultado das operações
 Todas as rotas estão prontas para uso e seguem as melhores práticas de segurança e integridade de dados!
