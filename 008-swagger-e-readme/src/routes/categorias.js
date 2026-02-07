@@ -31,8 +31,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Rota DELETE - /categorias/:id - deleta uma categoria específica pelo ID
-// Verifica se existem produtos vinculados antes de permitir a exclusão
+// Rota DELETE - /categorias/:id - deleta uma categoria
 router.delete('/:id', async (req, res) => {
   const categoriaId = req.params.id;
   

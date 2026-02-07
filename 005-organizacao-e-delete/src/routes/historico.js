@@ -52,8 +52,7 @@ router.get('/produto/:id_produto', async (req, res) => {
   }
 });
 
-// Rota DELETE - /historico/:id - exclui um registro específico do histórico de estoque
-// Remove um registro individual do histórico
+// Rota DELETE - /historico/:id - exclui um registro do histórico de estoque
 router.delete('/:id', async (req, res) => {
   const historicoId = req.params.id;
   
@@ -86,7 +85,6 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Rota DELETE - /historico/movimentacao/:id_movimentacao - exclui histórico por movimentação
-// Remove registros de histórico associados a uma movimentação específica
 router.delete('/movimentacao/:id_movimentacao', async (req, res) => {
   const movimentacaoId = req.params.id_movimentacao;
   
@@ -113,7 +111,6 @@ router.delete('/movimentacao/:id_movimentacao', async (req, res) => {
 });
 
 // Rota DELETE - /historico/produto/:id_produto - exclui todo histórico de um produto
-// Remove todos os registros de histórico de um produto específico
 router.delete('/produto/:id_produto', async (req, res) => {
   const produtoId = req.params.id_produto;
   

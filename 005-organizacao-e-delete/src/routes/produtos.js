@@ -83,84 +83,22 @@ router.get('/estoque-baixo', async (req, res) => {
   }
 });
 
-// Rota DELETE - /produtos/:id - desativa um produto (soft delete)
-// Define ativo = 0 para o produto, mantendo histórico de movimentações
+
+// Rota DELETE - /produtos/:id - exclui um produto (delete simples)
 router.delete('/:id', async (req, res) => {
   const produtoId = req.params.id;
-  
   try {
-    // Primeiro verifica se o produto existe
+    // Verifica se o produto existe
     const [produto] = await pool.execute('SELECT * FROM produtos WHERE id_produto = ?', [produtoId]);
     if (produto.length === 0) {
       return res.status(404).json({ error: 'Produto não encontrado' });
     }
-
-    // Verifica se o produto já está inativo
-    if (produto[0].ativo === 0) {
-      return res.status(400).json({ 
-        error: 'Produto já está inativo',
-        message: 'Este produto já foi desativado anteriormente'
-      });
-    }
-
-    // Realiza o soft delete (desativa o produto)
-    const [result] = await pool.execute('UPDATE produtos SET ativo = 0 WHERE id_produto = ?', [produtoId]);
-    
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Produto não encontrado' });
-    }
-
-    res.json({ 
-      message: 'Produto desativado com sucesso',
-      produto: produto[0].nome,
-      id: produtoId,
-      observacao: 'O produto foi desativado mas mantém seu histórico de movimentações'
-    });
-
+    // Exclui o produto
+    await pool.execute('DELETE FROM produtos WHERE id_produto = ?', [produtoId]);
+    res.json({ message: 'Produto excluído com sucesso', id: produtoId });
   } catch (error) {
-    console.error('Erro ao desativar produto:', error);
-    res.status(500).json({ error: 'Erro ao desativar produto', details: error.message });
-  }
-});
-
-// Rota DELETE - /produtos/:id/permanente - exclusão permanente de produto
-// Remove completamente o produto e suas dependências (usar com cuidado!)
-router.delete('/:id/permanente', async (req, res) => {
-  const produtoId = req.params.id;
-  
-  try {
-    // Primeiro verifica se o produto existe
-    const [produto] = await pool.execute('SELECT * FROM produtos WHERE id_produto = ?', [produtoId]);
-    if (produto.length === 0) {
-      return res.status(404).json({ error: 'Produto não encontrado' });
-    }
-
-    // Verifica se existem movimentações vinculadas
-    const [movimentacoes] = await pool.execute('SELECT COUNT(*) as total FROM movimentacoes WHERE id_produto = ?', [produtoId]);
-    if (movimentacoes[0].total > 0) {
-      return res.status(400).json({ 
-        error: 'Não é possível excluir permanentemente o produto',
-        message: `Existem ${movimentacoes[0].total} movimentação(ões) vinculada(s) a este produto. Use a rota de desativação (soft delete) em vez da exclusão permanente.`
-      });
-    }
-
-    // Se não há movimentações, procede com a exclusão permanente
-    const [result] = await pool.execute('DELETE FROM produtos WHERE id_produto = ?', [produtoId]);
-    
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ error: 'Produto não encontrado' });
-    }
-
-    res.json({ 
-      message: 'Produto excluído permanentemente com sucesso',
-      produto: produto[0].nome,
-      id: produtoId,
-      warning: 'Esta ação é irreversível'
-    });
-
-  } catch (error) {
-    console.error('Erro ao excluir permanentemente produto:', error);
-    res.status(500).json({ error: 'Erro ao excluir permanentemente produto', details: error.message });
+    console.error('Erro ao excluir produto:', error);
+    res.status(500).json({ error: 'Erro ao excluir produto', details: error.message });
   }
 });
 

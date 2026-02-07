@@ -62,8 +62,7 @@ router.get('/completas', async (req, res) => {
   }
 });
 
-// Rota DELETE - /movimentacoes/:id - exclui uma movimentação específica
-// Remove a movimentação e seu histórico de estoque associado
+// Rota DELETE - /movimentacoes/:id - exclui uma movimentação
 router.delete('/:id', async (req, res) => {
   const movimentacaoId = req.params.id;
   
@@ -118,7 +117,6 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Rota DELETE - /movimentacoes/produto/:id_produto - exclui todas as movimentações de um produto
-// Remove todas as movimentações e históricos de um produto específico (usar com cuidado!)
 router.delete('/produto/:id_produto', async (req, res) => {
   const produtoId = req.params.id_produto;
   
